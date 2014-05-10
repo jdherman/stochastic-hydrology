@@ -1,7 +1,6 @@
 clc; clear all;
 
-sebou_data = load('sebou_data.txt');
-x = sebou_data(:,3); % flows, cms
+x = load('input_data.txt');
 
 % Normal distribution
 m = mean(x); v = var(x);

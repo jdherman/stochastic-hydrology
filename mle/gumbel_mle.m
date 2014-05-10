@@ -1,7 +1,7 @@
 % Function to solve system of MLE equations
 function v = gumbel_mle(xtest)
-    sebou_data = load('sebou_data.txt');
-    x = sebou_data(:,3); % flows, cms
+    addpath ..
+    x = load('input_data.txt');
     N = length(x);
     zi = xtest(1);
     alpha = xtest(2);
