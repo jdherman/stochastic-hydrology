@@ -22,30 +22,29 @@ function [pe,pet] = censoredpp(x,xtin)
     % First, assign exceedance prob. to thresholds
     % as they are assigned, subtract count off of N
     % The first one is a little different than the others
-    pet(1) = length(x(x > xt(1)))/N;
-    N = N - length(x(x > xt(1))) - length(xtin(xtin == xt(1)));
-    
-    for i=2:length(xt)
-        pet(i) = pet(i-1) + (1-pet(i-1))*length(x(x > xt(i) & x < xt(i-1)))/N;
-        N = N - length(x(x > xt(i) & x < xt(i-1))) - length(xtin(xtin == xt(i)));
-    end
-    
-    % Then assign exceedance prob. to observations
-    % Need to grab those between each threshold
-    xidx = find(x > xt(1));
-    for j=1:length(xidx)
-        pe(xidx(j)) = j/(length(xidx)+1)*pet(1);
-    end
-    
-    for i=2:length(xt)
-        xidx = find(x < xt(i-1) & x > xt(i));
-
-        for j=1:length(xidx)
-            pe(xidx(j)) = pet(i-1) + j/(length(xidx)+1)*(pet(i) - pet(i-1));
+    for i=1:length(xt)
+        if(i==1)
+            xs = x(x > xt(i));
+            pet(i) = length(xs)/N;
+        else
+            xs = x(x > xt(i) & x < xt(i-1));
+            pet(i) = pet(i-1) + (1-pet(i-1))*length(xs)/N;
+        end
+        N = N - length(xs) - length(xtin(xtin == xt(i)));
+        
+        % Then assign probs. to observations that fall between thresholds
+        for j=1:length(xs)
+            idx = find(x==xs(j));
+            if(i==1)
+                pe(idx) = j/(length(xs)+1)*pet(i);
+            else
+                pe(idx) = pet(i-1) + j/(length(xs)+1)*(pet(i) - pet(i-1));
+            end
         end
     end
     
-    pe = [x',pe];
-    pet = [xt',pet];
+    % return as nonexceedance for probability plots
+    pe = flipud([x', 1-pe]);
+    pet = flipud([xt', 1-pet]);
     
 end
