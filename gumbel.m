@@ -60,8 +60,10 @@ disp(' ');
 
 % Probability plot - note avoid negative logs (complex numbers)
 % Normally the inverse functions do this for you but this one is manual
-ub = zhat - ahat*log(-1*log((i-1)/n + 0.127));
-lb = zhat - ahat*log(-1*log((i)/n - 0.127));
+% 90% KS Bounds (LB Table 7.5)
+ca = 0.819/(sqrt(n) - 0.01 + 0.85/sqrt(n));
+ub = zhat - ahat*log(-1*log((i-1)/n + ca));
+lb = zhat - ahat*log(-1*log((i)/n - ca));
 lb(imag(lb)~=0) = NaN;
 ub(imag(ub)~=0) = NaN;
 probplot(q,x,lb,ub,'Gumbel','cms');

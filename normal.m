@@ -12,8 +12,10 @@ disp(['1%: ' num2str(norminv(.01,m,sqrt(v))) ', 99%: ' num2str(norminv(.99,m,sqr
 i = 1:length(x);
 n = length(x);
 q = norminv( (i-3/8)/(n+1/4) , m, sqrt(v));
-ub = norminv( (i-1)/n + 0.127, m, sqrt(v));
-lb = norminv( (i)/n - 0.127, m, sqrt(v));
+% 90% KS Bounds (LB Table 7.5)
+ca = 0.819/(sqrt(n) - 0.01 + 0.85/sqrt(n));
+ub = norminv( (i-1)/n + ca, m, sqrt(v));
+lb = norminv( (i)/n - ca, m, sqrt(v));
 probplot(q,x,lb,ub,'Normal','cms');
 
 % Print PPCC

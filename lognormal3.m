@@ -29,6 +29,8 @@ r = corrcoef(sort(x),q);
 disp(['PPCC: ' num2str(r(1,2))]);
 disp(' ');
 
-ub = logninv( (i-1)/n + 0.127, mhat,sqrt(vhat))+that;
-lb = logninv( (i)/n - 0.127, mhat,sqrt(vhat))+that;
+% 90% KS Bounds (LB Table 7.5)
+ca = 0.819/(sqrt(n) - 0.01 + 0.85/sqrt(n));
+ub = logninv( (i-1)/n + ca, mhat,sqrt(vhat))+that;
+lb = logninv( (i)/n - ca, mhat,sqrt(vhat))+that;
 probplot(q,x,lb,ub,'Lognormal-3','cms');

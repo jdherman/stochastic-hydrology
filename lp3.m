@@ -26,7 +26,8 @@ r = corrcoef(sort(x),q);
 disp(['PPCC: ' num2str(r(1,2))]);
 disp(' ');
 
-% 90% KS bounds (can you do this...?)
-ub = exp(m + s*((2/g)*(1 + g*norminv((i-1)/n + 0.127)/6 - g^2/36).^3 - 2/g));
-lb = exp(m + s*((2/g)*(1 + g*norminv((i)/n - 0.127)/6 - g^2/36).^3 - 2/g));
+% 90% KS Bounds (LB Table 7.5)
+ca = 0.819/(sqrt(n) - 0.01 + 0.85/sqrt(n));
+ub = exp(m + s*((2/g)*(1 + g*norminv((i-1)/n + ca)/6 - g^2/36).^3 - 2/g));
+lb = exp(m + s*((2/g)*(1 + g*norminv((i)/n - ca)/6 - g^2/36).^3 - 2/g));
 probplot(q,x,lb,ub,'Log-Pearson-3','cms');
